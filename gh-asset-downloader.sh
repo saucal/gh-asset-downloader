@@ -10,7 +10,7 @@ xargs=$(which gxargs || which xargs)
 
 # Validate settings.
 [ -f ~/.secrets ] && source ~/.secrets
-[ $# -lt 2 ] && { echo "Usage: $0 [owner] [repo] [(tag)] [(name)]"; exit 1; }
+[ $# -lt 1 ] && { echo "Usage: $0 owner/repo [(tag)] [(name)]"; exit 1; }
 [ "$TRACE" ] && set -x
 
 if [[ -z ${GITHUB_API_TOKEN} ]]; then
@@ -18,7 +18,7 @@ if [[ -z ${GITHUB_API_TOKEN} ]]; then
 fi
 [ "$GITHUB_API_TOKEN" ] || { echo "Error: please provide your token." >&2; exit 1; }
 
-read owner repo tag name <<<$@
+read repo tag name <<<$@
 
 release_tag=latest
 
@@ -27,7 +27,7 @@ if [[ ! -z ${tag} ]]; then
 fi
 
 GH_API="https://api.github.com"
-GH_REPO="$GH_API/repos/$owner/$repo"
+GH_REPO="$GH_API/repos/$repo"
 
 GH_TAGS="$GH_REPO/releases/$release_tag"
 
